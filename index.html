@@ -1,0 +1,1255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>AI-Powered Customer Support & Service Automation</title>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<style>
+:root {
+  --sf-blue: #0176d3;
+  --sf-blue-dark: #014486;
+  --sf-blue-light: #e8f4ff;
+  --sf-navy: #032d60;
+  --sf-teal: #06a59a;
+  --sf-green: #2e844a;
+  --sf-green-light: #e9f6ee;
+  --sf-red: #ba0517;
+  --sf-red-light: #fef0f0;
+  --sf-yellow: #dd7a01;
+  --sf-yellow-light: #fef4e0;
+  --sf-purple: #7526e3;
+  --sf-gray-1: #f3f3f3;
+  --sf-gray-2: #e5e5e5;
+  --sf-gray-3: #c9c9c9;
+  --sf-gray-4: #9a9a9a;
+  --sf-gray-5: #706e6b;
+  --sf-gray-6: #3e3e3c;
+  --sf-white: #ffffff;
+  --ai-gold: #f59e0b;
+  --radius: 6px;
+  --shadow: 0 2px 12px rgba(0,0,0,0.10);
+  --shadow-lg: 0 8px 32px rgba(0,0,0,0.14);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Sora', sans-serif;
+  background: #f0f0f0;
+  color: var(--sf-gray-6);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ─── TOP NAV ─── */
+.topnav {
+  background: var(--sf-navy);
+  height: 48px;
+  display: flex;
+  align-items: center;
+  padding: 0 16px;
+  gap: 8px;
+  position: sticky;
+  top: 0;
+  z-index: 200;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+}
+.topnav-logo {
+  display: flex; align-items: center; gap: 8px;
+  color: white; font-weight: 700; font-size: 15px; letter-spacing: -0.3px;
+  cursor: pointer;
+}
+.topnav-logo svg { width: 28px; height: 28px; }
+.topnav-appname {
+  background: rgba(255,255,255,0.12);
+  color: white;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+  white-space: nowrap;
+}
+.topnav-spacer { flex: 1; }
+.topnav-btn {
+  background: none; border: none; color: rgba(255,255,255,0.75);
+  cursor: pointer; padding: 6px; border-radius: 4px;
+  display: flex; align-items: center; gap: 4px;
+  font-size: 12px; font-family: inherit;
+  transition: all 0.15s;
+}
+.topnav-btn:hover { background: rgba(255,255,255,0.15); color: white; }
+.nav-avatar {
+  width: 28px; height: 28px; border-radius: 50%;
+  background: linear-gradient(135deg, var(--sf-teal), var(--sf-blue));
+  display: flex; align-items: center; justify-content: center;
+  color: white; font-size: 11px; font-weight: 700; cursor: pointer;
+}
+
+/* ─── OBJECT NAV TABS ─── */
+.obj-tabs {
+  background: var(--sf-white);
+  border-bottom: 1px solid var(--sf-gray-2);
+  display: flex;
+  align-items: center;
+  padding: 0 16px;
+  gap: 0;
+  overflow-x: auto;
+  position: sticky;
+  top: 48px;
+  z-index: 100;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+}
+.obj-tab {
+  padding: 12px 18px;
+  border: none; background: none;
+  cursor: pointer; font-family: inherit;
+  font-size: 13px; font-weight: 500;
+  color: var(--sf-gray-5);
+  border-bottom: 3px solid transparent;
+  white-space: nowrap;
+  transition: all 0.15s;
+  display: flex; align-items: center; gap: 6px;
+}
+.obj-tab:hover { color: var(--sf-blue); background: var(--sf-blue-light); }
+.obj-tab.active { color: var(--sf-blue); border-bottom-color: var(--sf-blue); font-weight: 600; }
+.obj-tab-icon { font-size: 15px; }
+
+/* ─── MAIN LAYOUT ─── */
+.main {
+  flex: 1;
+  padding: 20px;
+  max-width: 1400px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+/* ─── PAGE HEADER ─── */
+.page-header {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 16px;
+  flex-wrap: wrap; gap: 10px;
+}
+.page-title {
+  font-size: 22px; font-weight: 700; color: var(--sf-gray-6);
+  display: flex; align-items: center; gap: 8px;
+}
+.page-title span.count {
+  background: var(--sf-gray-2);
+  color: var(--sf-gray-5);
+  font-size: 12px;
+  padding: 2px 8px;
+  border-radius: 10px;
+  font-weight: 500;
+}
+.btn { padding: 8px 16px; border-radius: var(--radius); font-family: inherit; font-size: 13px; font-weight: 600; cursor: pointer; border: none; transition: all 0.15s; display: inline-flex; align-items: center; gap: 6px; }
+.btn-primary { background: var(--sf-blue); color: white; }
+.btn-primary:hover { background: var(--sf-blue-dark); }
+.btn-outline { background: white; color: var(--sf-blue); border: 1px solid var(--sf-blue); }
+.btn-outline:hover { background: var(--sf-blue-light); }
+.btn-success { background: var(--sf-green); color: white; }
+.btn-success:hover { background: #1e5e32; }
+.btn-danger { background: var(--sf-red); color: white; }
+.btn-sm { padding: 5px 10px; font-size: 12px; }
+.btn-ai { background: linear-gradient(135deg, #7526e3, #0176d3); color: white; position: relative; overflow: hidden; }
+.btn-ai::before { content: ''; position: absolute; inset: 0; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent); transform: translateX(-100%); transition: transform 0.5s; }
+.btn-ai:hover::before { transform: translateX(100%); }
+
+/* ─── CARDS ─── */
+.card { background: white; border-radius: 8px; box-shadow: var(--shadow); margin-bottom: 16px; overflow: hidden; }
+.card-header { padding: 14px 18px; border-bottom: 1px solid var(--sf-gray-2); display: flex; align-items: center; justify-content: space-between; }
+.card-title { font-size: 14px; font-weight: 700; color: var(--sf-gray-6); }
+.card-body { padding: 16px 18px; }
+
+/* ─── TABLE ─── */
+.sf-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+.sf-table th { background: var(--sf-gray-1); padding: 10px 14px; text-align: left; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: var(--sf-gray-5); border-bottom: 1px solid var(--sf-gray-2); white-space: nowrap; }
+.sf-table td { padding: 11px 14px; border-bottom: 1px solid var(--sf-gray-2); vertical-align: middle; }
+.sf-table tr:hover td { background: #f8faff; }
+.sf-table tr:last-child td { border-bottom: none; }
+.record-link { color: var(--sf-blue); font-weight: 600; cursor: pointer; text-decoration: none; }
+.record-link:hover { text-decoration: underline; }
+
+/* ─── BADGES ─── */
+.badge { display: inline-flex; align-items: center; gap: 4px; padding: 3px 8px; border-radius: 12px; font-size: 11px; font-weight: 600; white-space: nowrap; }
+.badge-new { background: #e0f0ff; color: #0054a6; }
+.badge-open { background: #fff3e0; color: #b45309; }
+.badge-inprogress { background: #e8f5e9; color: #1e5e32; }
+.badge-closed { background: var(--sf-gray-1); color: var(--sf-gray-5); }
+.badge-critical { background: #fef0f0; color: var(--sf-red); }
+.badge-high { background: #fff3e0; color: var(--sf-yellow); }
+.badge-medium { background: #e8f5e9; color: var(--sf-green); }
+.badge-low { background: var(--sf-gray-1); color: var(--sf-gray-5); }
+.badge-ai { background: linear-gradient(135deg, #ede9fe, #dbeafe); color: #4c1d95; border: 1px solid #c4b5fd; }
+
+/* ─── RECORD DETAIL ─── */
+.record-detail { display: none; }
+.record-detail.active { display: block; }
+.detail-header {
+  background: linear-gradient(135deg, var(--sf-navy), var(--sf-blue-dark));
+  color: white;
+  padding: 20px 24px;
+  border-radius: 8px 8px 0 0;
+  margin-bottom: 0;
+}
+.detail-header-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+.detail-record-name { font-size: 20px; font-weight: 700; margin-bottom: 6px; }
+.detail-meta { font-size: 12px; opacity: 0.8; display: flex; gap: 16px; flex-wrap: wrap; }
+.detail-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+
+.fields-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 0; }
+.field-row { padding: 12px 16px; border-bottom: 1px solid var(--sf-gray-2); }
+.field-row:last-child { border-bottom: none; }
+.field-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: var(--sf-gray-4); margin-bottom: 4px; }
+.field-value { font-size: 14px; color: var(--sf-gray-6); font-weight: 500; }
+.field-value.empty { color: var(--sf-gray-3); font-style: italic; }
+
+/* ─── AI SECTION ─── */
+.ai-panel {
+  border: 2px solid transparent;
+  background: linear-gradient(white, white) padding-box,
+              linear-gradient(135deg, #7526e3, #0176d3, var(--sf-teal)) border-box;
+  border-radius: 8px;
+  overflow: hidden;
+}
+.ai-panel-header {
+  background: linear-gradient(135deg, #f5f3ff, #eff6ff);
+  padding: 12px 16px;
+  display: flex; align-items: center; justify-content: space-between;
+  border-bottom: 1px solid #e0e7ff;
+}
+.ai-panel-title { font-size: 13px; font-weight: 700; color: #4c1d95; display: flex; align-items: center; gap: 6px; }
+.ai-panel-body { padding: 16px; }
+.ai-output {
+  background: linear-gradient(135deg, #fafafa, #f0f4ff);
+  border: 1px solid #e0e7ff;
+  border-radius: 6px;
+  padding: 14px;
+  font-size: 13px;
+  line-height: 1.7;
+  color: var(--sf-gray-6);
+  min-height: 80px;
+  font-family: 'Sora', sans-serif;
+  white-space: pre-wrap;
+}
+.ai-output.generating { animation: pulse-bg 1.5s infinite; }
+@keyframes pulse-bg {
+  0%, 100% { background: linear-gradient(135deg, #fafafa, #f0f4ff); }
+  50% { background: linear-gradient(135deg, #eff6ff, #f5f3ff); }
+}
+.ai-thinking {
+  display: flex; align-items: center; gap: 8px;
+  color: var(--sf-purple); font-size: 12px; font-weight: 600;
+  padding: 8px 0;
+}
+.ai-dots span {
+  display: inline-block; width: 6px; height: 6px;
+  background: var(--sf-purple); border-radius: 50%;
+  animation: dot-bounce 1.2s infinite;
+}
+.ai-dots span:nth-child(2) { animation-delay: 0.2s; }
+.ai-dots span:nth-child(3) { animation-delay: 0.4s; }
+@keyframes dot-bounce { 0%, 80%, 100% { transform: translateY(0); opacity: 0.4; } 40% { transform: translateY(-6px); opacity: 1; } }
+
+/* ─── MODAL ─── */
+.modal-overlay {
+  display: none; position: fixed; inset: 0;
+  background: rgba(3,45,96,0.45); backdrop-filter: blur(3px);
+  z-index: 500; align-items: center; justify-content: center;
+  padding: 20px;
+}
+.modal-overlay.open { display: flex; }
+.modal {
+  background: white; border-radius: 10px; width: 100%; max-width: 600px;
+  max-height: 90vh; overflow-y: auto;
+  box-shadow: 0 24px 64px rgba(0,0,0,0.25);
+  animation: modal-in 0.2s ease;
+}
+@keyframes modal-in { from { transform: translateY(-16px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+.modal-header { padding: 18px 20px; border-bottom: 1px solid var(--sf-gray-2); display: flex; align-items: center; justify-content: space-between; }
+.modal-title { font-size: 16px; font-weight: 700; }
+.modal-close { background: none; border: none; cursor: pointer; font-size: 20px; color: var(--sf-gray-4); padding: 4px; border-radius: 4px; line-height: 1; }
+.modal-close:hover { background: var(--sf-gray-1); color: var(--sf-gray-6); }
+.modal-body { padding: 20px; }
+.modal-footer { padding: 14px 20px; border-top: 1px solid var(--sf-gray-2); display: flex; justify-content: flex-end; gap: 8px; }
+
+/* ─── FORM ─── */
+.form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.form-group { display: flex; flex-direction: column; gap: 4px; }
+.form-group.full { grid-column: 1/-1; }
+.form-label { font-size: 12px; font-weight: 600; color: var(--sf-gray-5); }
+.form-label .required { color: var(--sf-red); }
+.form-control {
+  padding: 8px 12px; border: 1px solid var(--sf-gray-3);
+  border-radius: var(--radius); font-family: inherit; font-size: 13px;
+  color: var(--sf-gray-6); background: white;
+  transition: all 0.15s; width: 100%;
+}
+.form-control:focus { outline: none; border-color: var(--sf-blue); box-shadow: 0 0 0 3px rgba(1,118,211,0.12); }
+.form-control.error { border-color: var(--sf-red); }
+.form-error { font-size: 11px; color: var(--sf-red); margin-top: 2px; }
+
+/* ─── DASHBOARD ─── */
+.stats-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 12px; margin-bottom: 20px; }
+.stat-card {
+  background: white; border-radius: 8px; padding: 16px;
+  box-shadow: var(--shadow); border-left: 4px solid transparent;
+  transition: transform 0.15s, box-shadow 0.15s;
+  cursor: default;
+}
+.stat-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-lg); }
+.stat-card.blue { border-left-color: var(--sf-blue); }
+.stat-card.green { border-left-color: var(--sf-green); }
+.stat-card.yellow { border-left-color: var(--sf-yellow); }
+.stat-card.red { border-left-color: var(--sf-red); }
+.stat-card.purple { border-left-color: var(--sf-purple); }
+.stat-card.teal { border-left-color: var(--sf-teal); }
+.stat-number { font-size: 28px; font-weight: 700; line-height: 1; margin-bottom: 4px; }
+.stat-label { font-size: 12px; color: var(--sf-gray-4); font-weight: 500; }
+.stat-delta { font-size: 11px; color: var(--sf-green); font-weight: 600; margin-top: 4px; }
+
+/* ─── TOAST ─── */
+.toast-container { position: fixed; bottom: 20px; right: 20px; z-index: 999; display: flex; flex-direction: column; gap: 8px; }
+.toast {
+  background: var(--sf-gray-6); color: white;
+  padding: 12px 16px; border-radius: 8px;
+  font-size: 13px; font-weight: 500;
+  display: flex; align-items: center; gap: 8px;
+  box-shadow: var(--shadow-lg);
+  animation: toast-in 0.3s ease;
+  max-width: 320px;
+}
+.toast.success { background: var(--sf-green); }
+.toast.error { background: var(--sf-red); }
+.toast.info { background: var(--sf-blue); }
+@keyframes toast-in { from { transform: translateX(20px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+
+/* ─── BREADCRUMB ─── */
+.breadcrumb { display: flex; align-items: center; gap: 4px; font-size: 12px; color: var(--sf-gray-4); margin-bottom: 12px; }
+.breadcrumb a { color: var(--sf-blue); cursor: pointer; font-weight: 500; }
+.breadcrumb a:hover { text-decoration: underline; }
+.breadcrumb-sep { color: var(--sf-gray-3); }
+
+/* ─── EMPTY STATE ─── */
+.empty-state { text-align: center; padding: 48px 20px; color: var(--sf-gray-4); }
+.empty-state-icon { font-size: 48px; margin-bottom: 12px; }
+.empty-state-title { font-size: 16px; font-weight: 700; color: var(--sf-gray-5); margin-bottom: 6px; }
+.empty-state-desc { font-size: 13px; margin-bottom: 16px; }
+
+/* ─── SECTION HIDDEN ─── */
+.section { display: none; }
+.section.active { display: block; }
+
+/* ─── TABS ─── */
+.inner-tabs { display: flex; gap: 0; border-bottom: 1px solid var(--sf-gray-2); margin-bottom: 16px; }
+.inner-tab { padding: 9px 16px; border: none; background: none; cursor: pointer; font-family: inherit; font-size: 13px; font-weight: 500; color: var(--sf-gray-5); border-bottom: 2px solid transparent; transition: all 0.15s; }
+.inner-tab.active { color: var(--sf-blue); border-bottom-color: var(--sf-blue); font-weight: 600; }
+.inner-tab:hover { color: var(--sf-blue); }
+
+/* ─── PROMPT BUILDER ─── */
+.prompt-box {
+  background: #0f172a;
+  border-radius: 8px;
+  padding: 16px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  line-height: 1.8;
+  color: #e2e8f0;
+}
+.prompt-token { color: #7dd3fc; }
+.prompt-field { color: #86efac; }
+.prompt-text { color: #e2e8f0; }
+
+/* ─── SCROLLBAR ─── */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--sf-gray-3); border-radius: 3px; }
+
+/* ─── RESPONSIVE ─── */
+@media (max-width: 700px) {
+  .form-grid { grid-template-columns: 1fr; }
+  .stats-grid { grid-template-columns: repeat(2, 1fr); }
+  .fields-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- ─── TOP NAV ─── -->
+<nav class="topnav">
+  <div class="topnav-logo" onclick="goHome()">
+    <svg viewBox="0 0 32 32" fill="none">
+      <path d="M16 4C9.4 4 4 9.4 4 16s5.4 12 12 12 12-5.4 12-12S22.6 4 16 4z" fill="#00A1E0"/>
+      <path d="M20 11.5c-1-.4-2.1-.6-3.3-.3C15.3 8.6 12.7 7 9.8 7c-3.7 0-6.8 3-6.8 6.8 0 1 .2 2 .6 2.8C2.6 17.3 2 18.5 2 20c0 2.8 2.2 5 5 5 .5 0 1-.1 1.5-.2C9.5 26 11.2 27 13 27c2.4 0 4.5-1.5 5.3-3.7.4.1.9.2 1.4.2 3.5 0 6.3-2.8 6.3-6.3 0-3-2-5.4-4.7-6.2z" fill="white" opacity=".9"/>
+    </svg>
+    CRM AI
+  </div>
+  <span class="topnav-appname">⚡ AI-Powered Customer Support & Service Automation</span>
+  <div class="topnav-spacer"></div>
+  <button class="topnav-btn" onclick="showSection('dashboard')">📊 Dashboard</button>
+  <button class="topnav-btn" onclick="openSetup()">⚙️ Setup</button>
+  <div class="nav-avatar" title="Admin User">AD</div>
+</nav>
+
+<!-- ─── OBJECT TABS ─── -->
+<div class="obj-tabs">
+  <button class="obj-tab active" data-tab="cases" onclick="switchTab('cases')"><span class="obj-tab-icon">🗂️</span>User Cases</button>
+  <button class="obj-tab" data-tab="customers" onclick="switchTab('customers')"><span class="obj-tab-icon">👤</span>Customers</button>
+  <button class="obj-tab" data-tab="orders" onclick="switchTab('orders')"><span class="obj-tab-icon">📦</span>Orders</button>
+  <button class="obj-tab" data-tab="merchandise" onclick="switchTab('merchandise')"><span class="obj-tab-icon">🏷️</span>Merchandise</button>
+  <button class="obj-tab" data-tab="knowledge" onclick="switchTab('knowledge')"><span class="obj-tab-icon">📚</span>Knowledge</button>
+  <button class="obj-tab" data-tab="prompt" onclick="switchTab('prompt')"><span class="obj-tab-icon">🤖</span>Prompt Builder</button>
+</div>
+
+<!-- ─── MAIN ─── -->
+<div class="main">
+
+  <!-- DASHBOARD -->
+  <div id="section-dashboard" class="section">
+    <div class="page-header">
+      <div class="page-title">📊 Dashboard — AI Support Overview</div>
+      <button class="btn btn-outline btn-sm" onclick="showSection('cases')">← Back to Cases</button>
+    </div>
+    <div class="stats-grid">
+      <div class="stat-card blue"><div class="stat-number" id="stat-total">0</div><div class="stat-label">Total Cases</div><div class="stat-delta">↑ All time</div></div>
+      <div class="stat-card yellow"><div class="stat-number" id="stat-open">0</div><div class="stat-label">Open Cases</div></div>
+      <div class="stat-card green"><div class="stat-number" id="stat-closed">0</div><div class="stat-label">Closed Cases</div></div>
+      <div class="stat-card purple"><div class="stat-number" id="stat-ai">0</div><div class="stat-label">AI Summaries Generated</div><div class="stat-delta">✨ Automated</div></div>
+      <div class="stat-card teal"><div class="stat-number" id="stat-customers">0</div><div class="stat-label">Customers</div></div>
+      <div class="stat-card red"><div class="stat-number" id="stat-critical">0</div><div class="stat-label">Critical Priority</div></div>
+    </div>
+
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px;">
+      <div class="card">
+        <div class="card-header"><span class="card-title">📋 Recent Cases</span></div>
+        <div class="card-body" style="padding:0;" id="dash-recent-cases"></div>
+      </div>
+      <div class="card">
+        <div class="card-header"><span class="card-title">🤖 AI Activity Log</span></div>
+        <div class="card-body" id="ai-log" style="font-size:12px; max-height:260px; overflow-y:auto;"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CASES LIST -->
+  <div id="section-cases" class="section active">
+    <div class="page-header">
+      <div class="page-title">🗂️ User Cases <span class="count" id="cases-count">0</span></div>
+      <div style="display:flex;gap:8px;">
+        <button class="btn btn-primary" onclick="openNewCase()">+ New Case</button>
+      </div>
+    </div>
+    <div class="card" style="margin:0;">
+      <div id="cases-table-wrapper"></div>
+    </div>
+  </div>
+
+  <!-- CASE DETAIL -->
+  <div id="section-case-detail" class="section">
+    <div class="breadcrumb">
+      <a onclick="showSection('cases')">User Cases</a>
+      <span class="breadcrumb-sep">›</span>
+      <span id="detail-breadcrumb">Case Detail</span>
+    </div>
+    <div class="card" style="margin:0;">
+      <div class="detail-header" id="detail-header-block">
+        <div class="detail-header-top">
+          <div>
+            <div class="detail-record-name" id="dh-name"></div>
+            <div class="detail-meta">
+              <span id="dh-id"></span>
+              <span id="dh-created"></span>
+              <span id="dh-owner">Owner: Admin User</span>
+            </div>
+          </div>
+          <div class="detail-actions">
+            <button class="btn btn-outline btn-sm" style="background:transparent;border-color:rgba(255,255,255,0.4);color:white;" onclick="editCurrentCase()">✏️ Edit</button>
+            <button class="btn btn-sm" style="background:rgba(255,255,255,0.15);color:white;border:1px solid rgba(255,255,255,0.3);" onclick="deleteCurrentCase()">🗑️ Delete</button>
+          </div>
+        </div>
+      </div>
+
+      <div style="padding:16px 0 0 0;">
+        <div class="inner-tabs" style="padding:0 18px;">
+          <button class="inner-tab active" onclick="switchDetailTab('details', this)">Details</button>
+          <button class="inner-tab" onclick="switchDetailTab('ai', this)">🤖 AI Summary</button>
+          <button class="inner-tab" onclick="switchDetailTab('related', this)">Related</button>
+        </div>
+
+        <!-- Details Tab -->
+        <div id="dtab-details" style="padding:0 18px 18px;">
+          <div class="fields-grid" id="detail-fields"></div>
+        </div>
+
+        <!-- AI Tab -->
+        <div id="dtab-ai" style="display:none; padding:0 18px 18px;">
+          <div class="ai-panel">
+            <div class="ai-panel-header">
+              <div class="ai-panel-title">✨ Agentforce — Prompt Builder: MetaDataInspection</div>
+              <span class="badge badge-ai">Field Generation Template</span>
+            </div>
+            <div class="ai-panel-body">
+              <div style="margin-bottom:12px; font-size:12px; color:var(--sf-gray-5);">
+                Template uses: <code style="background:#f0f4ff;padding:2px 6px;border-radius:3px;">{!$Input:User_Case__c.Name}</code>
+                <code style="background:#f0f4ff;padding:2px 6px;border-radius:3px;">{!$Input:User_Case__c.CreatedDate}</code>
+                <code style="background:#f0f4ff;padding:2px 6px;border-radius:3px;">{!$Input:User_Case__c.Status__c}</code>
+              </div>
+              <div id="ai-status-area" style="margin-bottom:10px; display:none;" class="ai-thinking">
+                <div class="ai-dots"><span></span><span></span><span></span></div>
+                Agentforce is generating your inspection summary...
+              </div>
+              <div class="ai-output" id="ai-output-field">No AI summary generated yet. Click the button below to generate one.</div>
+              <div style="margin-top:12px; display:flex; gap:8px; align-items:center;">
+                <button class="btn btn-ai" onclick="generateAISummary()">✨ Generate AI Summary</button>
+                <span id="ai-saved-tag" style="display:none;" class="badge badge-ai">✅ Saved to record</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Related Tab -->
+        <div id="dtab-related" style="display:none; padding:0 18px 18px;">
+          <div id="related-content"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CUSTOMERS -->
+  <div id="section-customers" class="section">
+    <div class="page-header">
+      <div class="page-title">👤 Customers <span class="count" id="customers-count">0</span></div>
+      <button class="btn btn-primary" onclick="openNewCustomer()">+ New Customer</button>
+    </div>
+    <div class="card" style="margin:0;"><div id="customers-table-wrapper"></div></div>
+  </div>
+
+  <!-- ORDERS -->
+  <div id="section-orders" class="section">
+    <div class="page-header">
+      <div class="page-title">📦 Orders <span class="count" id="orders-count">0</span></div>
+      <button class="btn btn-primary" onclick="openNewOrder()">+ New Order</button>
+    </div>
+    <div class="card" style="margin:0;"><div id="orders-table-wrapper"></div></div>
+  </div>
+
+  <!-- MERCHANDISE -->
+  <div id="section-merchandise" class="section">
+    <div class="page-header">
+      <div class="page-title">🏷️ Merchandise <span class="count" id="merchandise-count">0</span></div>
+      <button class="btn btn-primary" onclick="openNewMerchandise()">+ New Merchandise</button>
+    </div>
+    <div class="card" style="margin:0;"><div id="merchandise-table-wrapper"></div></div>
+  </div>
+
+  <!-- KNOWLEDGE -->
+  <div id="section-knowledge" class="section">
+    <div class="page-header">
+      <div class="page-title">📚 Knowledge Base <span class="count" id="knowledge-count">0</span></div>
+      <button class="btn btn-primary" onclick="openNewKnowledge()">+ New Article</button>
+    </div>
+    <div class="card" style="margin:0;"><div id="knowledge-table-wrapper"></div></div>
+  </div>
+
+  <!-- PROMPT BUILDER -->
+  <div id="section-prompt" class="section">
+    <div class="page-header">
+      <div class="page-title">🤖 Prompt Builder — Einstein AI</div>
+      <span class="badge badge-ai">✅ Active Template</span>
+    </div>
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px;">
+      <div class="card">
+        <div class="card-header"><span class="card-title">Template: MetaDataInspection</span></div>
+        <div class="card-body">
+          <table style="width:100%;font-size:13px;border-collapse:collapse;">
+            <tr><td style="padding:8px;font-weight:700;color:var(--sf-gray-4);font-size:11px;text-transform:uppercase;">Prompt Type</td><td style="padding:8px;">Field Generation</td></tr>
+            <tr style="background:var(--sf-gray-1);"><td style="padding:8px;font-weight:700;color:var(--sf-gray-4);font-size:11px;text-transform:uppercase;">Object</td><td style="padding:8px;">User Case (User_Case__c)</td></tr>
+            <tr><td style="padding:8px;font-weight:700;color:var(--sf-gray-4);font-size:11px;text-transform:uppercase;">Target Field</td><td style="padding:8px;">Ai Summary (Ai_Summary__c)</td></tr>
+            <tr style="background:var(--sf-gray-1);"><td style="padding:8px;font-weight:700;color:var(--sf-gray-4);font-size:11px;text-transform:uppercase;">Status</td><td style="padding:8px;"><span class="badge badge-inprogress">✅ Active</span></td></tr>
+            <tr><td style="padding:8px;font-weight:700;color:var(--sf-gray-4);font-size:11px;text-transform:uppercase;">Einstein</td><td style="padding:8px;"><span class="badge badge-ai">Enabled</span></td></tr>
+          </table>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header"><span class="card-title">📝 Prompt Template</span></div>
+        <div class="card-body">
+          <div class="prompt-box">
+<span class="prompt-text">Generate a clear and professional inspection
+summary using the provided inspection details.
+
+</span><span class="prompt-text">Inspection Name: </span><span class="prompt-field">{!$Input:User_Case__c.Name}</span><span class="prompt-text">
+Created Date: </span><span class="prompt-field">{!$Input:User_Case__c.CreatedDate}</span><span class="prompt-text">
+Status: </span><span class="prompt-field">{!$Input:User_Case__c.Status__c}</span><span class="prompt-text">
+
+Explain the inspection status, inspection date,
+and key observations. Ensure the summary is
+easy to understand and suitable for
+business users.</span>
+          </div>
+          <div style="margin-top:12px; font-size:12px; color:var(--sf-gray-4);">
+            Resources: Name · CreatedDate · Status__c · Priority__c · Customer__c
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header"><span class="card-title">⚡ Live Prompt Tester</span></div>
+      <div class="card-body">
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:14px;">
+          <div class="form-group"><label class="form-label">Case Name</label><input class="form-control" id="test-name" value="INSP-2024-001" placeholder="Case Name"/></div>
+          <div class="form-group"><label class="form-label">Status</label><select class="form-control" id="test-status"><option>New</option><option>In Progress</option><option>Closed</option><option>Pending Review</option></select></div>
+          <div class="form-group"><label class="form-label">Priority</label><select class="form-control" id="test-priority"><option>Medium</option><option>High</option><option>Critical</option><option>Low</option></select></div>
+        </div>
+        <button class="btn btn-ai" onclick="testPrompt()">✨ Run Prompt</button>
+        <div id="test-output" style="margin-top:12px; display:none;" class="ai-output"></div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /main -->
+
+<!-- MODALS -->
+<div class="modal-overlay" id="modal-case">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="modal-title" id="modal-case-title">New User Case</span>
+      <button class="modal-close" onclick="closeModal('modal-case')">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-grid">
+        <div class="form-group"><label class="form-label">Case Name <span class="required">*</span></label><input class="form-control" id="f-case-name" placeholder="e.g. INSP-2024-001"/><div class="form-error" id="e-case-name"></div></div>
+        <div class="form-group"><label class="form-label">Status <span class="required">*</span></label><select class="form-control" id="f-case-status"><option>New</option><option>In Progress</option><option>Pending Review</option><option>Closed</option></select></div>
+        <div class="form-group"><label class="form-label">Priority</label><select class="form-control" id="f-case-priority"><option>Low</option><option>Medium</option><option>High</option><option>Critical</option></select></div>
+        <div class="form-group"><label class="form-label">Inspector</label><input class="form-control" id="f-case-inspector" placeholder="Inspector name"/></div>
+        <div class="form-group"><label class="form-label">Inspection Date</label><input class="form-control" type="date" id="f-case-date"/></div>
+        <div class="form-group"><label class="form-label">Customer</label><select class="form-control" id="f-case-customer"><option value="">-- None --</option></select></div>
+        <div class="form-group full"><label class="form-label">Description</label><textarea class="form-control" id="f-case-desc" rows="3" placeholder="Brief description of the case..."></textarea></div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeModal('modal-case')">Cancel</button>
+      <button class="btn btn-primary" onclick="saveCase()">Save</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-customer">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="modal-title" id="modal-cust-title">New Customer</span>
+      <button class="modal-close" onclick="closeModal('modal-customer')">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-grid">
+        <div class="form-group"><label class="form-label">First Name <span class="required">*</span></label><input class="form-control" id="f-cust-first" placeholder="First Name"/><div class="form-error" id="e-cust-first"></div></div>
+        <div class="form-group"><label class="form-label">Last Name <span class="required">*</span></label><input class="form-control" id="f-cust-last" placeholder="Last Name"/></div>
+        <div class="form-group"><label class="form-label">Email <span class="required">*</span></label><input class="form-control" id="f-cust-email" type="email" placeholder="email@example.com"/></div>
+        <div class="form-group"><label class="form-label">Phone</label><input class="form-control" id="f-cust-phone" placeholder="+91-XXXXXXXXXX"/></div>
+        <div class="form-group"><label class="form-label">Status</label><select class="form-control" id="f-cust-status"><option>Active</option><option>Inactive</option><option>Prospect</option></select></div>
+        <div class="form-group"><label class="form-label">Company</label><input class="form-control" id="f-cust-company" placeholder="Company name"/></div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeModal('modal-customer')">Cancel</button>
+      <button class="btn btn-primary" onclick="saveCustomer()">Save</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-order">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="modal-title">New Order</span>
+      <button class="modal-close" onclick="closeModal('modal-order')">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-grid">
+        <div class="form-group"><label class="form-label">Order Name <span class="required">*</span></label><input class="form-control" id="f-order-name" placeholder="e.g. ORD-2024-001"/></div>
+        <div class="form-group"><label class="form-label">Customer</label><select class="form-control" id="f-order-customer"><option value="">-- Select Customer --</option></select></div>
+        <div class="form-group"><label class="form-label">Status</label><select class="form-control" id="f-order-status"><option>Draft</option><option>Confirmed</option><option>Shipped</option><option>Delivered</option><option>Cancelled</option></select></div>
+        <div class="form-group"><label class="form-label">Amount (₹)</label><input class="form-control" id="f-order-amount" type="number" placeholder="0.00"/></div>
+        <div class="form-group"><label class="form-label">Order Date</label><input class="form-control" type="date" id="f-order-date"/></div>
+        <div class="form-group"><label class="form-label">Merchandise</label><select class="form-control" id="f-order-merch"><option value="">-- Select Item --</option></select></div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeModal('modal-order')">Cancel</button>
+      <button class="btn btn-primary" onclick="saveOrder()">Save</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-merchandise">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="modal-title">New Merchandise</span>
+      <button class="modal-close" onclick="closeModal('modal-merchandise')">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-grid">
+        <div class="form-group"><label class="form-label">Merchandise Name <span class="required">*</span></label><input class="form-control" id="f-merch-name" placeholder="Item name"/></div>
+        <div class="form-group"><label class="form-label">Category</label><select class="form-control" id="f-merch-cat"><option>Electronics</option><option>Furniture</option><option>Software</option><option>Hardware</option><option>Services</option><option>Other</option></select></div>
+        <div class="form-group"><label class="form-label">Price (₹)</label><input class="form-control" id="f-merch-price" type="number" placeholder="0.00"/></div>
+        <div class="form-group"><label class="form-label">Stock Qty</label><input class="form-control" id="f-merch-stock" type="number" placeholder="0"/></div>
+        <div class="form-group full"><label class="form-label">Description</label><textarea class="form-control" id="f-merch-desc" rows="2" placeholder="Item description..."></textarea></div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeModal('modal-merchandise')">Cancel</button>
+      <button class="btn btn-primary" onclick="saveMerchandise()">Save</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-knowledge">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="modal-title">New Knowledge Article</span>
+      <button class="modal-close" onclick="closeModal('modal-knowledge')">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-grid">
+        <div class="form-group full"><label class="form-label">Article Title <span class="required">*</span></label><input class="form-control" id="f-know-title" placeholder="Article title..."/></div>
+        <div class="form-group"><label class="form-label">Category</label><select class="form-control" id="f-know-cat"><option>How-To</option><option>Troubleshooting</option><option>Policy</option><option>FAQ</option><option>Reference</option></select></div>
+        <div class="form-group"><label class="form-label">Status</label><select class="form-control" id="f-know-status"><option>Draft</option><option>Published</option><option>Archived</option></select></div>
+        <div class="form-group full"><label class="form-label">Content</label><textarea class="form-control" id="f-know-content" rows="4" placeholder="Article content..."></textarea></div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeModal('modal-knowledge')">Cancel</button>
+      <button class="btn btn-primary" onclick="saveKnowledge()">Save</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-setup">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="modal-title">⚙️ Salesforce Setup</span>
+      <button class="modal-close" onclick="closeModal('modal-setup')">×</button>
+    </div>
+    <div class="modal-body">
+      <div style="display:grid;gap:10px;">
+        <div style="background:var(--sf-green-light);border:1px solid #a7d9b3;border-radius:6px;padding:12px;display:flex;align-items:center;gap:10px;">
+          <span style="font-size:20px;">✅</span>
+          <div><div style="font-weight:700;font-size:13px;color:var(--sf-green);">Einstein AI — Enabled</div><div style="font-size:12px;color:var(--sf-gray-5);">Agentforce features active for this org</div></div>
+        </div>
+        <div style="background:var(--sf-green-light);border:1px solid #a7d9b3;border-radius:6px;padding:12px;display:flex;align-items:center;gap:10px;">
+          <span style="font-size:20px;">✅</span>
+          <div><div style="font-weight:700;font-size:13px;color:var(--sf-green);">Prompt Builder — Active</div><div style="font-size:12px;color:var(--sf-gray-5);">Template MetaDataInspection is active</div></div>
+        </div>
+        <div style="background:var(--sf-green-light);border:1px solid #a7d9b3;border-radius:6px;padding:12px;display:flex;align-items:center;gap:10px;">
+          <span style="font-size:20px;">✅</span>
+          <div><div style="font-weight:700;font-size:13px;color:var(--sf-green);">Lightning Record Pages — Configured</div><div style="font-size:12px;color:var(--sf-gray-5);">Dynamic Detail Page set as Org Default</div></div>
+        </div>
+        <div style="background:var(--sf-green-light);border:1px solid #a7d9b3;border-radius:6px;padding:12px;display:flex;align-items:center;gap:10px;">
+          <span style="font-size:20px;">✅</span>
+          <div><div style="font-weight:700;font-size:13px;color:var(--sf-green);">Security — FLS & Profiles Active</div><div style="font-size:12px;color:var(--sf-gray-5);">Field-Level Security and Role Hierarchy configured</div></div>
+        </div>
+        <div style="background:var(--sf-green-light);border:1px solid #a7d9b3;border-radius:6px;padding:12px;display:flex;align-items:center;gap:10px;">
+          <span style="font-size:20px;">✅</span>
+          <div><div style="font-weight:700;font-size:13px;color:var(--sf-green);">Validation Rules — Enforced</div><div style="font-size:12px;color:var(--sf-gray-5);">All custom objects have required field validations</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer"><button class="btn btn-primary" onclick="closeModal('modal-setup')">Close</button></div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast-container" id="toast-container"></div>
+
+<script>
+// ─── STATE ───
+const state = {
+  cases: [], customers: [], orders: [], merchandise: [], knowledge: [],
+  aiLog: [], aiGenerated: 0,
+  editingCaseId: null, editingCustomerId: null,
+  currentCaseId: null,
+  currentSection: 'cases',
+};
+
+let recIdCounter = { case: 1, customer: 1, order: 1, merch: 1, know: 1 };
+
+// ─── SEED DATA ───
+function seedData() {
+  state.customers = [
+    { id: 'CUST-001', firstName: 'Priya', lastName: 'Sharma', email: 'priya.sharma@techcorp.in', phone: '+91-9876543210', status: 'Active', company: 'TechCorp India', createdDate: '2024-01-15' },
+    { id: 'CUST-002', firstName: 'Rahul', lastName: 'Verma', email: 'rahul.v@finserve.com', phone: '+91-9812345678', status: 'Active', company: 'FinServe Ltd', createdDate: '2024-02-20' },
+    { id: 'CUST-003', firstName: 'Ananya', lastName: 'Patel', email: 'ananya@ecomm.co', phone: '+91-9900123456', status: 'Prospect', company: 'EComm Solutions', createdDate: '2024-03-10' },
+  ];
+  recIdCounter.customer = 4;
+
+  state.merchandise = [
+    { id: 'MERCH-001', name: 'Enterprise CRM License', category: 'Software', price: 150000, stock: 999, description: 'Annual Salesforce Enterprise license per user', createdDate: '2024-01-01' },
+    { id: 'MERCH-002', name: 'Server Hardware Unit', category: 'Hardware', price: 85000, stock: 12, description: 'Rack-mounted server for on-premises deployment', createdDate: '2024-01-05' },
+    { id: 'MERCH-003', name: 'Implementation Services', category: 'Services', price: 50000, stock: 999, description: 'Professional implementation and consulting hours', createdDate: '2024-01-08' },
+  ];
+  recIdCounter.merch = 4;
+
+  state.orders = [
+    { id: 'ORD-001', name: 'ORD-2024-001', customer: 'CUST-001', status: 'Delivered', amount: 300000, date: '2024-02-01', merch: 'MERCH-001', createdDate: '2024-02-01' },
+    { id: 'ORD-002', name: 'ORD-2024-002', customer: 'CUST-002', status: 'Confirmed', amount: 85000, date: '2024-03-15', merch: 'MERCH-002', createdDate: '2024-03-15' },
+  ];
+  recIdCounter.order = 3;
+
+  state.knowledge = [
+    { id: 'KB-001', title: 'How to Create a New Inspection Case', category: 'How-To', status: 'Published', content: 'Navigate to User Cases > New Case. Fill in all required fields including Case Name, Status, and Priority. Click Save.', createdDate: '2024-01-10' },
+    { id: 'KB-002', title: 'Troubleshooting AI Summary Generation', category: 'Troubleshooting', status: 'Published', content: 'Ensure Einstein is enabled in Setup. Verify Prompt Template is Active. Check that the AI Summary field exists on the User Case object.', createdDate: '2024-02-01' },
+    { id: 'KB-003', title: 'Field-Level Security Configuration Guide', category: 'Reference', status: 'Published', content: 'Go to Setup > Profiles > select a profile > Field Permissions. Set Read/Edit access per field as required by role.', createdDate: '2024-02-15' },
+  ];
+  recIdCounter.know = 4;
+
+  state.cases = [
+    { id: 'CASE-001', name: 'INSP-2024-001', status: 'Closed', priority: 'High', inspector: 'Amit Kumar', date: '2024-01-20', customer: 'CUST-001', description: 'Annual equipment inspection for TechCorp facility.', aiSummary: 'Inspection INSP-2024-001 was successfully completed on January 20, 2024. The status is Closed, indicating that all inspection activities have been thoroughly reviewed and resolved. Key observations include satisfactory equipment performance, compliance with safety standards, and no critical issues identified. This inspection was conducted for TechCorp India and handled by Inspector Amit Kumar. All documentation has been finalized and approved.', createdDate: '2024-01-20' },
+    { id: 'CASE-002', name: 'INSP-2024-002', status: 'In Progress', priority: 'Critical', inspector: 'Sunita Rao', date: '2024-03-01', customer: 'CUST-002', description: 'Emergency fire safety inspection for FinServe office.', aiSummary: '', createdDate: '2024-03-01' },
+    { id: 'CASE-003', name: 'INSP-2024-003', status: 'New', priority: 'Medium', inspector: 'Deepak Nair', date: '2024-03-10', customer: 'CUST-003', description: 'Routine IT infrastructure audit for EComm Solutions.', aiSummary: '', createdDate: '2024-03-10' },
+    { id: 'CASE-004', name: 'INSP-2024-004', status: 'Pending Review', priority: 'Low', inspector: 'Meera Singh', date: '2024-03-12', customer: '', description: 'Quarterly compliance check for internal operations.', aiSummary: '', createdDate: '2024-03-12' },
+  ];
+  recIdCounter.case = 5;
+
+  state.aiGenerated = 1;
+  state.aiLog = [
+    { time: '2024-01-20 14:32', case: 'INSP-2024-001', action: 'Summary generated & saved' },
+  ];
+}
+
+// ─── UTILS ───
+function genId(prefix, counter) { return `${prefix}-${String(counter).padStart(3,'0')}`; }
+function today() { return new Date().toISOString().split('T')[0]; }
+function fmt(dateStr) { if (!dateStr) return '—'; const d = new Date(dateStr); return d.toLocaleDateString('en-IN',{day:'2-digit',month:'short',year:'numeric'}); }
+function custName(id) { const c = state.customers.find(x=>x.id===id); return c ? `${c.firstName} ${c.lastName}` : '—'; }
+function merchName(id) { const m = state.merchandise.find(x=>x.id===id); return m ? m.name : '—'; }
+
+// ─── TOASTS ───
+function toast(msg, type='info') {
+  const el = document.createElement('div');
+  el.className = `toast ${type}`;
+  el.innerHTML = (type==='success'?'✅':type==='error'?'❌':'ℹ️') + ' ' + msg;
+  document.getElementById('toast-container').appendChild(el);
+  setTimeout(()=>el.remove(), 3500);
+}
+
+// ─── NAVIGATION ───
+function showSection(name) {
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.getElementById('section-'+name).classList.add('active');
+  state.currentSection = name;
+  if (name==='dashboard') updateDashboard();
+}
+
+function goHome() { showSection('cases'); switchTab('cases'); }
+
+function switchTab(tab) {
+  document.querySelectorAll('.obj-tab').forEach(t=>t.classList.remove('active'));
+  document.querySelector(`[data-tab="${tab}"]`)?.classList.add('active');
+  if (tab==='prompt') showSection('prompt');
+  else if (tab==='cases') { showSection('cases'); renderCasesTable(); }
+  else if (tab==='customers') { showSection('customers'); renderCustomersTable(); }
+  else if (tab==='orders') { showSection('orders'); renderOrdersTable(); }
+  else if (tab==='merchandise') { showSection('merchandise'); renderMerchandiseTable(); }
+  else if (tab==='knowledge') { showSection('knowledge'); renderKnowledgeTable(); }
+}
+
+function openSetup() { document.getElementById('modal-setup').classList.add('open'); }
+
+function switchDetailTab(tab, btn) {
+  document.querySelectorAll('.inner-tab').forEach(t=>t.classList.remove('active'));
+  if(btn) btn.classList.add('active');
+  document.getElementById('dtab-details').style.display = tab==='details' ? '' : 'none';
+  document.getElementById('dtab-ai').style.display = tab==='ai' ? '' : 'none';
+  document.getElementById('dtab-related').style.display = tab==='related' ? '' : 'none';
+  if (tab==='related') renderRelated();
+}
+
+// ─── MODAL ───
+function openModal(id) { document.getElementById(id).classList.add('open'); }
+function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+
+// ─── CASES ───
+function statusBadge(s) {
+  const m = {'New':'badge-new','In Progress':'badge-inprogress','Closed':'badge-closed','Pending Review':'badge-open'};
+  return `<span class="badge ${m[s]||'badge-new'}">${s}</span>`;
+}
+function priorityBadge(p) {
+  const m = {'Low':'badge-low','Medium':'badge-medium','High':'badge-high','Critical':'badge-critical'};
+  return `<span class="badge ${m[p]||'badge-medium'}">${p}</span>`;
+}
+
+function renderCasesTable() {
+  const el = document.getElementById('cases-table-wrapper');
+  document.getElementById('cases-count').textContent = state.cases.length;
+  if (!state.cases.length) {
+    el.innerHTML = `<div class="empty-state"><div class="empty-state-icon">🗂️</div><div class="empty-state-title">No Cases Yet</div><div class="empty-state-desc">Create your first case to get started.</div><button class="btn btn-primary" onclick="openNewCase()">+ New Case</button></div>`;
+    return;
+  }
+  el.innerHTML = `<table class="sf-table">
+    <thead><tr><th>Case Name</th><th>Status</th><th>Priority</th><th>Inspector</th><th>Date</th><th>Customer</th><th>AI Summary</th><th>Actions</th></tr></thead>
+    <tbody>${state.cases.map(c=>`<tr>
+      <td><a class="record-link" onclick="openCaseDetail('${c.id}')">${c.name}</a></td>
+      <td>${statusBadge(c.status)}</td>
+      <td>${priorityBadge(c.priority)}</td>
+      <td>${c.inspector||'—'}</td>
+      <td>${fmt(c.date)}</td>
+      <td>${custName(c.customer)}</td>
+      <td>${c.aiSummary ? '<span class="badge badge-ai">✨ Generated</span>' : '<span style="color:var(--sf-gray-3);font-size:12px;">—</span>'}</td>
+      <td style="white-space:nowrap;">
+        <button class="btn btn-outline btn-sm" onclick="openCaseDetail('${c.id}')">View</button>
+        <button class="btn btn-outline btn-sm" onclick="openEditCase('${c.id}')">Edit</button>
+      </td>
+    </tr>`).join('')}</tbody>
+  </table>`;
+}
+
+function openNewCase() {
+  state.editingCaseId = null;
+  document.getElementById('modal-case-title').textContent = 'New User Case';
+  ['f-case-name','f-case-inspector','f-case-desc'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('f-case-status').value='New';
+  document.getElementById('f-case-priority').value='Medium';
+  document.getElementById('f-case-date').value=today();
+  populateCustomerDropdown('f-case-customer');
+  openModal('modal-case');
+}
+
+function openEditCase(id) {
+  const c = state.cases.find(x=>x.id===id);
+  if (!c) return;
+  state.editingCaseId = id;
+  document.getElementById('modal-case-title').textContent = 'Edit Case: ' + c.name;
+  document.getElementById('f-case-name').value = c.name;
+  document.getElementById('f-case-status').value = c.status;
+  document.getElementById('f-case-priority').value = c.priority;
+  document.getElementById('f-case-inspector').value = c.inspector||'';
+  document.getElementById('f-case-date').value = c.date||'';
+  document.getElementById('f-case-desc').value = c.description||'';
+  populateCustomerDropdown('f-case-customer', c.customer);
+  openModal('modal-case');
+}
+
+function editCurrentCase() { if (state.currentCaseId) openEditCase(state.currentCaseId); }
+
+function deleteCurrentCase() {
+  if (!state.currentCaseId) return;
+  state.cases = state.cases.filter(c=>c.id!==state.currentCaseId);
+  toast('Case deleted.', 'info');
+  showSection('cases'); renderCasesTable();
+  switchTab('cases');
+}
+
+function saveCase() {
+  const name = document.getElementById('f-case-name').value.trim();
+  if (!name) { document.getElementById('e-case-name').textContent = 'Case Name is required.'; return; }
+  document.getElementById('e-case-name').textContent = '';
+  const data = {
+    name, status: document.getElementById('f-case-status').value,
+    priority: document.getElementById('f-case-priority').value,
+    inspector: document.getElementById('f-case-inspector').value.trim(),
+    date: document.getElementById('f-case-date').value,
+    customer: document.getElementById('f-case-customer').value,
+    description: document.getElementById('f-case-desc').value.trim(),
+  };
+  if (state.editingCaseId) {
+    const idx = state.cases.findIndex(c=>c.id===state.editingCaseId);
+    state.cases[idx] = {...state.cases[idx], ...data};
+    toast('Case updated successfully!', 'success');
+  } else {
+    const id = genId('CASE', recIdCounter.case++);
+    state.cases.unshift({ id, ...data, aiSummary: '', createdDate: today() });
+    toast('Case created successfully!', 'success');
+  }
+  closeModal('modal-case');
+  renderCasesTable();
+  if (state.currentSection === 'case-detail') openCaseDetail(state.editingCaseId || state.cases[0].id);
+}
+
+function openCaseDetail(id) {
+  const c = state.cases.find(x=>x.id===id);
+  if (!c) return;
+  state.currentCaseId = id;
+  document.getElementById('detail-breadcrumb').textContent = c.name;
+  document.getElementById('dh-name').textContent = c.name;
+  document.getElementById('dh-id').textContent = `Record ID: ${c.id}`;
+  document.getElementById('dh-created').textContent = `Created: ${fmt(c.createdDate)}`;
+
+  document.getElementById('detail-fields').innerHTML = `
+    <div class="field-row"><div class="field-label">Case Name</div><div class="field-value">${c.name}</div></div>
+    <div class="field-row"><div class="field-label">Status</div><div class="field-value">${statusBadge(c.status)}</div></div>
+    <div class="field-row"><div class="field-label">Priority</div><div class="field-value">${priorityBadge(c.priority)}</div></div>
+    <div class="field-row"><div class="field-label">Inspector</div><div class="field-value">${c.inspector||'<span class="empty">—</span>'}</div></div>
+    <div class="field-row"><div class="field-label">Inspection Date</div><div class="field-value">${fmt(c.date)||'<span class="empty">—</span>'}</div></div>
+    <div class="field-row"><div class="field-label">Customer</div><div class="field-value">${custName(c.customer)}</div></div>
+    <div class="field-row"><div class="field-label">Created Date</div><div class="field-value">${fmt(c.createdDate)}</div></div>
+    <div class="field-row"><div class="field-label">Record ID</div><div class="field-value" style="font-family:'JetBrains Mono',monospace;font-size:12px;">${c.id}</div></div>
+    <div class="field-row" style="grid-column:1/-1;"><div class="field-label">Description</div><div class="field-value">${c.description||'<span class="empty">No description</span>'}</div></div>
+  `;
+
+  const aiOut = document.getElementById('ai-output-field');
+  const savedTag = document.getElementById('ai-saved-tag');
+  if (c.aiSummary) {
+    aiOut.textContent = c.aiSummary;
+    savedTag.style.display = 'inline-flex';
+  } else {
+    aiOut.textContent = 'No AI summary generated yet. Click the button below to generate one.';
+    savedTag.style.display = 'none';
+  }
+  document.getElementById('ai-status-area').style.display = 'none';
+
+  // Reset to details tab
+  switchDetailTab('details', document.querySelector('.inner-tab'));
+  showSection('case-detail');
+}
+
+// ─── AI SUMMARY ───
+const aiTemplates = [
+  (c, cust) => `Inspection Summary — ${c.name}\n\nThis inspection was conducted on ${fmt(c.date)} and is currently marked as "${c.status}". ${cust ? `The case is associated with customer ${cust}.` : ''}\n\nKey Observations:\n• Inspection status "${c.status}" indicates that ${c.status==='Closed'?'all findings have been thoroughly reviewed and resolved.':c.status==='In Progress'?'the inspection is actively ongoing and requires continued attention.':c.status==='New'?'the inspection has been logged and awaits initial assessment.':'the case is awaiting further review before final closure.'}\n• Inspector ${c.inspector||'(unassigned)'} has been assigned responsibility for this case.\n• Priority level is set to "${c.priority}", ${c.priority==='Critical'?'requiring immediate escalation and resolution.':c.priority==='High'?'indicating this case should be addressed promptly.':'suggesting routine handling within standard SLAs.'}\n\nConclusion: ${c.status==='Closed'?'This inspection has been successfully completed. All required documentation has been reviewed and approved. No outstanding action items remain.':'This inspection requires continued follow-up. The assigned inspector should provide status updates and escalate any critical findings per standard operating procedures.'}\n\nGenerated by Agentforce Prompt Builder — Template: MetaDataInspection`,
+
+  (c, cust) => `Professional Inspection Report Summary\nRecord: ${c.name} | ID: ${c.id}\n\nOverview:\nThe inspection case "${c.name}" was initiated on ${fmt(c.date)} with a current operational status of "${c.status}". This record is classified under the "${c.priority}" priority tier${cust ? `, associated with ${cust}` : ''}.\n\nStatus Analysis:\nThe "${c.status}" designation reflects ${c.status==='Closed'?'the successful completion of all inspection protocols and formal sign-off by the reviewing authority.':c.status==='In Progress'?'active engagement by the inspection team, with findings currently being documented and verified.':c.status==='New'?'a newly registered inspection awaiting assignment and initial field assessment.':'a case pending additional documentation or management approval before final determination.'}\n\nInspector Notes:\nInspector ${c.inspector||'TBD'} is responsible for this case. ${c.description ? `Context provided: "${c.description}"` : 'No additional context has been provided at this time.'}\n\nThis summary was auto-generated using Salesforce Agentforce (Prompt Builder — Field Generation Template: MetaDataInspection).`,
+];
+
+async function generateAISummary() {
+  const c = state.cases.find(x=>x.id===state.currentCaseId);
+  if (!c) return;
+
+  const aiOut = document.getElementById('ai-output-field');
+  const aiStatus = document.getElementById('ai-status-area');
+  const savedTag = document.getElementById('ai-saved-tag');
+
+  aiOut.textContent = '';
+  aiOut.classList.add('generating');
+  aiStatus.style.display = 'flex';
+  savedTag.style.display = 'none';
+
+  await delay(2200);
+
+  aiStatus.style.display = 'none';
+  aiOut.classList.remove('generating');
+
+  const cust = custName(c.customer) !== '—' ? custName(c.customer) : null;
+  const tmpl = aiTemplates[Math.floor(Math.random()*aiTemplates.length)];
+  const summary = tmpl(c, cust);
+
+  // Typewriter
+  let i = 0;
+  aiOut.textContent = '';
+  const interval = setInterval(()=>{
+    aiOut.textContent += summary[i++];
+    if (i >= summary.length) {
+      clearInterval(interval);
+      c.aiSummary = summary;
+      savedTag.style.display = 'inline-flex';
+      state.aiGenerated++;
+      state.aiLog.unshift({ time: new Date().toLocaleString('en-IN',{dateStyle:'short',timeStyle:'short'}), case: c.name, action: 'Summary generated & saved' });
+      renderCasesTable();
+      toast('AI Summary generated and saved to record!', 'success');
+    }
+  }, 12);
+}
+
+function delay(ms) { return new Promise(r=>setTimeout(r,ms)); }
+
+// ─── TEST PROMPT ───
+async function testPrompt() {
+  const name = document.getElementById('test-name').value || 'TEST-001';
+  const status = document.getElementById('test-status').value;
+  const priority = document.getElementById('test-priority').value;
+  const out = document.getElementById('test-output');
+  out.style.display='block';
+  out.textContent='Generating...';
+  out.classList.add('generating');
+  await delay(1800);
+  out.classList.remove('generating');
+  const result = `Inspection Summary — ${name}\n\nCase "${name}" has a current status of "${status}" and is classified as "${priority}" priority. This record was generated through the MetaDataInspection Prompt Builder template using Salesforce Agentforce (Einstein Field Generation).\n\nStatus "${status}" indicates ${status==='Closed'?'all tasks are resolved and the case is finalized.':status==='In Progress'?'active work is underway.':status==='New'?'the case has been registered and awaits assignment.':'the case is pending review.'} Priority level "${priority}" ${priority==='Critical'?'demands immediate escalation.':priority==='High'?'requires prompt attention.':priority==='Medium'?'follows standard SLA timelines.':'can be handled in normal queue order.'}\n\n✅ Generated by Agentforce — Template: MetaDataInspection`;
+  out.textContent = result;
+  toast('Prompt test completed!', 'success');
+}
+
+// ─── CUSTOMERS ───
+function renderCustomersTable() {
+  const el = document.getElementById('customers-table-wrapper');
+  document.getElementById('customers-count').textContent = state.customers.length;
+  if (!state.customers.length) { el.innerHTML = `<div class="empty-state"><div class="empty-state-icon">👤</div><div class="empty-state-title">No Customers</div><button class="btn btn-primary" onclick="openNewCustomer()">+ New Customer</button></div>`; return; }
+  el.innerHTML = `<table class="sf-table">
+    <thead><tr><th>Name</th><th>Email</th><th>Phone</th><th>Status</th><th>Company</th><th>Created</th></tr></thead>
+    <tbody>${state.customers.map(c=>`<tr>
+      <td><span class="record-link">${c.firstName} ${c.lastName}</span></td>
+      <td>${c.email}</td><td>${c.phone||'—'}</td>
+      <td><span class="badge ${c.status==='Active'?'badge-inprogress':c.status==='Inactive'?'badge-closed':'badge-new'}">${c.status}</span></td>
+      <td>${c.company||'—'}</td><td>${fmt(c.createdDate)}</td>
+    </tr>`).join('')}</tbody></table>`;
+}
+
+function openNewCustomer() {
+  ['f-cust-first','f-cust-last','f-cust-email','f-cust-phone','f-cust-company'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('f-cust-status').value='Active';
+  openModal('modal-customer');
+}
+
+function saveCustomer() {
+  const first = document.getElementById('f-cust-first').value.trim();
+  const last = document.getElementById('f-cust-last').value.trim();
+  const email = document.getElementById('f-cust-email').value.trim();
+  if (!first) { document.getElementById('e-cust-first').textContent='Required'; return; }
+  document.getElementById('e-cust-first').textContent='';
+  const id = genId('CUST', recIdCounter.customer++);
+  state.customers.push({ id, firstName:first, lastName:last, email, phone:document.getElementById('f-cust-phone').value.trim(), status:document.getElementById('f-cust-status').value, company:document.getElementById('f-cust-company').value.trim(), createdDate:today() });
+  closeModal('modal-customer');
+  renderCustomersTable();
+  toast('Customer created!', 'success');
+}
+
+// ─── ORDERS ───
+function renderOrdersTable() {
+  const el = document.getElementById('orders-table-wrapper');
+  document.getElementById('orders-count').textContent = state.orders.length;
+  if (!state.orders.length) { el.innerHTML = `<div class="empty-state"><div class="empty-state-icon">📦</div><div class="empty-state-title">No Orders</div><button class="btn btn-primary" onclick="openNewOrder()">+ New Order</button></div>`; return; }
+  const statusMap = {'Draft':'badge-new','Confirmed':'badge-open','Shipped':'badge-ai','Delivered':'badge-inprogress','Cancelled':'badge-closed'};
+  el.innerHTML = `<table class="sf-table">
+    <thead><tr><th>Order Name</th><th>Customer</th><th>Status</th><th>Amount (₹)</th><th>Merchandise</th><th>Order Date</th></tr></thead>
+    <tbody>${state.orders.map(o=>`<tr>
+      <td><span class="record-link">${o.name}</span></td>
+      <td>${custName(o.customer)}</td>
+      <td><span class="badge ${statusMap[o.status]||'badge-new'}">${o.status}</span></td>
+      <td>₹${Number(o.amount||0).toLocaleString('en-IN')}</td>
+      <td>${merchName(o.merch)}</td>
+      <td>${fmt(o.date)}</td>
+    </tr>`).join('')}</tbody></table>`;
+}
+
+function openNewOrder() {
+  ['f-order-name','f-order-amount'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('f-order-date').value=today();
+  document.getElementById('f-order-status').value='Draft';
+  populateCustomerDropdown('f-order-customer');
+  populateMerchandiseDropdown('f-order-merch');
+  openModal('modal-order');
+}
+
+function saveOrder() {
+  const name = document.getElementById('f-order-name').value.trim();
+  if (!name) { toast('Order Name is required.','error'); return; }
+  const id = genId('ORD', recIdCounter.order++);
+  state.orders.push({ id, name, customer:document.getElementById('f-order-customer').value, status:document.getElementById('f-order-status').value, amount:document.getElementById('f-order-amount').value, date:document.getElementById('f-order-date').value, merch:document.getElementById('f-order-merch').value, createdDate:today() });
+  closeModal('modal-order'); renderOrdersTable();
+  toast('Order created!', 'success');
+}
+
+// ─── MERCHANDISE ───
+function renderMerchandiseTable() {
+  const el = document.getElementById('merchandise-table-wrapper');
+  document.getElementById('merchandise-count').textContent = state.merchandise.length;
+  if (!state.merchandise.length) { el.innerHTML = `<div class="empty-state"><div class="empty-state-icon">🏷️</div><div class="empty-state-title">No Merchandise</div><button class="btn btn-primary" onclick="openNewMerchandise()">+ New Merchandise</button></div>`; return; }
+  el.innerHTML = `<table class="sf-table">
+    <thead><tr><th>Name</th><th>Category</th><th>Price (₹)</th><th>Stock Qty</th><th>Description</th></tr></thead>
+    <tbody>${state.merchandise.map(m=>`<tr>
+      <td><span class="record-link">${m.name}</span></td>
+      <td><span class="badge badge-open">${m.category}</span></td>
+      <td>₹${Number(m.price||0).toLocaleString('en-IN')}</td>
+      <td>${m.stock||0}</td>
+      <td style="max-width:260px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${m.description||'—'}</td>
+    </tr>`).join('')}</tbody></table>`;
+}
+
+function openNewMerchandise() {
+  ['f-merch-name','f-merch-price','f-merch-stock','f-merch-desc'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('f-merch-cat').value='Electronics';
+  openModal('modal-merchandise');
+}
+
+function saveMerchandise() {
+  const name = document.getElementById('f-merch-name').value.trim();
+  if (!name) { toast('Name is required.','error'); return; }
+  const id = genId('MERCH', recIdCounter.merch++);
+  state.merchandise.push({ id, name, category:document.getElementById('f-merch-cat').value, price:document.getElementById('f-merch-price').value, stock:document.getElementById('f-merch-stock').value, description:document.getElementById('f-merch-desc').value.trim(), createdDate:today() });
+  closeModal('modal-merchandise'); renderMerchandiseTable();
+  toast('Merchandise added!', 'success');
+}
+
+// ─── KNOWLEDGE ───
+function renderKnowledgeTable() {
+  const el = document.getElementById('knowledge-table-wrapper');
+  document.getElementById('knowledge-count').textContent = state.knowledge.length;
+  if (!state.knowledge.length) { el.innerHTML = `<div class="empty-state"><div class="empty-state-icon">📚</div><div class="empty-state-title">No Articles</div><button class="btn btn-primary" onclick="openNewKnowledge()">+ New Article</button></div>`; return; }
+  const sMap = {'Published':'badge-inprogress','Draft':'badge-new','Archived':'badge-closed'};
+  el.innerHTML = `<table class="sf-table">
+    <thead><tr><th>Title</th><th>Category</th><th>Status</th><th>Content Preview</th><th>Created</th></tr></thead>
+    <tbody>${state.knowledge.map(k=>`<tr>
+      <td><span class="record-link">${k.title}</span></td>
+      <td><span class="badge badge-ai">${k.category}</span></td>
+      <td><span class="badge ${sMap[k.status]||'badge-new'}">${k.status}</span></td>
+      <td style="max-width:280px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--sf-gray-5);">${k.content}</td>
+      <td>${fmt(k.createdDate)}</td>
+    </tr>`).join('')}</tbody></table>`;
+}
+
+function openNewKnowledge() {
+  ['f-know-title','f-know-content'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('f-know-cat').value='How-To';
+  document.getElementById('f-know-status').value='Draft';
+  openModal('modal-knowledge');
+}
+
+function saveKnowledge() {
+  const title = document.getElementById('f-know-title').value.trim();
+  if (!title) { toast('Title is required.','error'); return; }
+  const id = genId('KB', recIdCounter.know++);
+  state.knowledge.push({ id, title, category:document.getElementById('f-know-cat').value, status:document.getElementById('f-know-status').value, content:document.getElementById('f-know-content').value.trim(), createdDate:today() });
+  closeModal('modal-knowledge'); renderKnowledgeTable();
+  toast('Knowledge article saved!', 'success');
+}
+
+// ─── RELATED ───
+function renderRelated() {
+  const c = state.cases.find(x=>x.id===state.currentCaseId);
+  if (!c) return;
+  const cust = state.customers.find(x=>x.id===c.customer);
+  const custOrders = state.orders.filter(o=>o.customer===c.customer);
+  document.getElementById('related-content').innerHTML = `
+    <div style="margin-bottom:16px;">
+      <div style="font-weight:700;font-size:13px;margin-bottom:8px;color:var(--sf-gray-5);">CUSTOMER INFORMATION</div>
+      ${cust ? `<div class="card" style="margin:0;"><div class="card-body"><table style="width:100%;font-size:13px;"><tr><td style="padding:4px 0;font-weight:600;color:var(--sf-gray-4);width:120px;">Name</td><td>${cust.firstName} ${cust.lastName}</td></tr><tr><td style="padding:4px 0;font-weight:600;color:var(--sf-gray-4);">Email</td><td>${cust.email}</td></tr><tr><td style="padding:4px 0;font-weight:600;color:var(--sf-gray-4);">Company</td><td>${cust.company||'—'}</td></tr><tr><td style="padding:4px 0;font-weight:600;color:var(--sf-gray-4);">Status</td><td>${cust.status}</td></tr></table></div></div>` : '<p style="color:var(--sf-gray-3);font-size:13px;">No customer associated.</p>'}
+    </div>
+    <div>
+      <div style="font-weight:700;font-size:13px;margin-bottom:8px;color:var(--sf-gray-5);">RELATED ORDERS (${custOrders.length})</div>
+      ${custOrders.length ? `<table class="sf-table" style="font-size:12px;"><thead><tr><th>Order</th><th>Status</th><th>Amount</th></tr></thead><tbody>${custOrders.map(o=>`<tr><td>${o.name}</td><td>${o.status}</td><td>₹${Number(o.amount).toLocaleString('en-IN')}</td></tr>`).join('')}</tbody></table>` : '<p style="color:var(--sf-gray-3);font-size:13px;">No orders found.</p>'}
+    </div>`;
+}
+
+// ─── DASHBOARD ───
+function updateDashboard() {
+  document.getElementById('stat-total').textContent = state.cases.length;
+  document.getElementById('stat-open').textContent = state.cases.filter(c=>c.status!=='Closed').length;
+  document.getElementById('stat-closed').textContent = state.cases.filter(c=>c.status==='Closed').length;
+  document.getElementById('stat-ai').textContent = state.aiGenerated;
+  document.getElementById('stat-customers').textContent = state.customers.length;
+  document.getElementById('stat-critical').textContent = state.cases.filter(c=>c.priority==='Critical').length;
+
+  const recentCases = document.getElementById('dash-recent-cases');
+  const recent = state.cases.slice(0,5);
+  recentCases.innerHTML = `<table class="sf-table" style="font-size:12px;"><thead><tr><th>Case</th><th>Status</th><th>Priority</th></tr></thead><tbody>${recent.map(c=>`<tr><td><a class="record-link" onclick="openCaseDetail('${c.id}');showSection('case-detail');">${c.name}</a></td><td>${statusBadge(c.status)}</td><td>${priorityBadge(c.priority)}</td></tr>`).join('')}</tbody></table>`;
+
+  const aiLogEl = document.getElementById('ai-log');
+  if (!state.aiLog.length) { aiLogEl.innerHTML = '<p style="color:var(--sf-gray-3);">No AI activity yet.</p>'; return; }
+  aiLogEl.innerHTML = state.aiLog.map(l=>`<div style="padding:8px 0;border-bottom:1px solid var(--sf-gray-2);"><div style="font-weight:600;color:var(--sf-gray-6);">✨ ${l.case}</div><div style="color:var(--sf-gray-4);margin-top:2px;">${l.action} · ${l.time}</div></div>`).join('');
+}
+
+// ─── HELPERS ───
+function populateCustomerDropdown(selectId, selectedVal='') {
+  const el = document.getElementById(selectId);
+  el.innerHTML = '<option value="">— None —</option>' + state.customers.map(c=>`<option value="${c.id}" ${c.id===selectedVal?'selected':''}>${c.firstName} ${c.lastName}</option>`).join('');
+}
+
+function populateMerchandiseDropdown(selectId, selectedVal='') {
+  const el = document.getElementById(selectId);
+  el.innerHTML = '<option value="">— None —</option>' + state.merchandise.map(m=>`<option value="${m.id}" ${m.id===selectedVal?'selected':''}>${m.name}</option>`).join('');
+}
+
+// ─── INIT ───
+seedData();
+renderCasesTable();
+</script>
+</body>
+</html>
