@@ -42,12 +42,12 @@ This project demonstrates a fully functional **AI-Powered Customer Support & Ser
 ```
 ai-salesforce-project/
 │
-├── index.html              # Main application (single-file, no dependencies)
-├── README.md               # Project documentation
+├── index.html              
+├── README.md               
 ├── docs/
-│   └── project_documentation.docx   # Full project documentation (Word)
+│   └── project_documentation.docx   
 └── screenshots/
-    └── (add your own screenshots here)
+    
 ```
 
 ---
